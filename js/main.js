@@ -7,7 +7,13 @@ let screenRow = 0;
 let gameArea = "";
 let ctx = "";
 
-ground.src = "img/mapSheets/grass_and_road.png";
+axios.get(assetsURL).then(function (response) {
+  // handle success
+  console.log(response);
+});
+getAsset(singleAssetURL, 0);
+
+//ground.src = "img/mapSheets/grass_and_road.png";
 props.src = "img/mapSheets/props.png";
 
 $(document).ready(function () {
@@ -34,3 +40,14 @@ $(document).ready(function () {
     drawLayer(props, propsWidth, propsHeight, 65, layer2);
   }, 2000);
 });
+
+function getAsset(url, id) {
+  axios
+    .get(url + "/" + id, { responseType: "arraybuffer" })
+    .then((response) => {
+      let blob = new Blob([response.data], {
+        type: response.headers["content-type"],
+      });
+      ground.src = URL.createObjectURL(blob);
+    });
+}
